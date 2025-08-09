@@ -8,31 +8,44 @@
             <p>Find the perfect stay for your journey</p>
         </div>
 
+        <!-- Success message -->
+        @if(session('success'))
+            <div class="bg-green-200 text-green-800 p-2 rounded mb-3">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <!-- Search Form -->
         <div class="booking-container">
-            <form class="booking-form">
+            <form method="POST" action="{{ route('hotels.store') }}" class="booking-form">
+                @csrf
+
                 <div class="form-group">
                     <label for="destination">Destination</label>
-                    <input type="text" id="destination" class="form-control" placeholder="City or Hotel Name">
+                    <input type="text" id="destination" name="destination" class="form-control" placeholder="City or Hotel Name" required>
                 </div>
+
                 <div class="form-group">
                     <label for="checkin">Check-in</label>
-                    <input type="date" id="checkin" class="form-control">
+                    <input type="date" id="checkin" name="check_in" class="form-control" required>
                 </div>
+
                 <div class="form-group">
                     <label for="checkout">Check-out</label>
-                    <input type="date" id="checkout" class="form-control">
+                    <input type="date" id="checkout" name="check_out" class="form-control" required>
                 </div>
+
                 <div class="form-group">
                     <label for="guests">Guests & Rooms</label>
-                    <select id="guests" class="form-control">
-                        <option>1 Room, 1 Guest</option>
-                        <option>1 Room, 2 Guests</option>
-                        <option>2 Rooms, 2 Guests</option>
-                        <option>2 Rooms, 3 Guests</option>
-                        <option>2 Rooms, 4 Guests</option>
+                    <select id="guests" name="guests_rooms" class="form-control" required>
+                        <option value="1 Room, 1 Guest">1 Room, 1 Guest</option>
+                        <option value="1 Room, 2 Guests">1 Room, 2 Guests</option>
+                        <option value="2 Rooms, 2 Guests">2 Rooms, 2 Guests</option>
+                        <option value="2 Rooms, 3 Guests">2 Rooms, 3 Guests</option>
+                        <option value="2 Rooms, 4 Guests">2 Rooms, 4 Guests</option>
                     </select>
                 </div>
+
                 <div class="form-group">
                     <button class="btn btn-primary btn-block" type="submit">Find Hotels</button>
                 </div>

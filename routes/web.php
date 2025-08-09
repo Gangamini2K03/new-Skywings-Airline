@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-/*use App\Http\Controllers\HomeController;*/
-/*use Inertia\Inertia;*/
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\HotelController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ContactController;
 
 
 
@@ -10,18 +12,16 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
-
 Route::get('/about', function () {
     return view('about');
 })->name('about');
-
 
 Route::get('/admin', function () {
     return view('admin');
 })->name('admin');
 
 Route::get('/flights', function () {
-    return view('flight');
+    return view('flight'); // ✅ This must match resources/views/flights.blade.php
 })->name('flights');
 
 Route::get('/hotels', function () {
@@ -48,15 +48,26 @@ Route::get('/services', function () {
     return view('services');
 })->name('services');
 
+Route::post('/hotels',[HotelController::class, 'store'])->name('hotels.store');
+
+Route::get('/admin/hotels', [HotelController::class, 'adminIndex'])->name('admin.hotels');
+
+Route::post('/payment', [PaymentController::class, 'store'])->name('payment.store');
+
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+Route::get('/admin/contacts', [ContactController::class, 'index'])->name('admin.contacts');
 
 
+// OLD: You had a second form page here
+// Route::get('/book-flight', function () {
+//     return view('booking');
+// });
 
-/*
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
-});*/
+// ✅ FIXED: Your main form is inside flights.blade.php
+// The POST route below is correct and saves data
+
+Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

@@ -13,10 +13,7 @@
         </div>
     </div>
 </section>
-<!--<div class="hero">
-    <img src="https://cdn.pixabay.com/photo/2016/11/29/10/07/aircraft-1867455_1280.jpg" alt="Plane" style="width:100%; height:auto;">
-    <h1>Welcome to SkyWings Airlines</h1>
-</div>-->
+
 
 
 <section class="services">

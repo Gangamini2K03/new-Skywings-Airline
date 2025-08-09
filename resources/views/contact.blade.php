@@ -19,10 +19,8 @@
 
         <!-- Contact Grid -->
         <div class="contact-container">
-            <!-- Left: Info -->
             <div class="contact-info">
                 <h3>Get In Touch</h3>
-
                 <div class="contact-item">
                     <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
                     <div>
@@ -30,7 +28,6 @@
                         <p>123 Aviation Avenue, New York, NY 10001, USA</p>
                     </div>
                 </div>
-
                 <div class="contact-item">
                     <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
                     <div>
@@ -38,7 +35,6 @@
                         <p>+1 (800) 555-1234</p>
                     </div>
                 </div>
-
                 <div class="contact-item">
                     <div class="contact-icon"><i class="fas fa-envelope"></i></div>
                     <div>
@@ -46,7 +42,6 @@
                         <p>info@skywings.com</p>
                     </div>
                 </div>
-
                 <div class="contact-item">
                     <div class="contact-icon"><i class="fas fa-clock"></i></div>
                     <div>
@@ -56,29 +51,37 @@
                 </div>
             </div>
 
-            <!-- Right: Form -->
             <div class="contact-form">
                 <h3>Send Us a Message</h3>
-                <form>
+                <form action="{{ route('contact.store') }}" method="POST">
+                    @csrf
                     <div class="form-group">
-                        <label for="name">Full Name</label>
-                        <input type="text" id="name" class="form-control" placeholder="Your Name">
+                        <label>Full Name</label>
+                        <input type="text" name="full_name" class="form-control" placeholder="Your Name" required>
                     </div>
+
                     <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" class="form-control" placeholder="your@email.com">
+                        <label>Email Address</label>
+                        <input type="email" name="email" class="form-control" placeholder="your@email.com" required>
                     </div>
+
                     <div class="form-group">
-                        <label for="subject">Subject</label>
-                        <input type="text" id="subject" class="form-control" placeholder="Subject">
+                        <label>Subject</label>
+                        <input type="text" name="subject" class="form-control" placeholder="Subject" required>
                     </div>
+
                     <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" class="form-control" rows="5" placeholder="Your message..."></textarea>
+                        <label>Message</label>
+                        <textarea name="message" class="form-control" rows="5" placeholder="Your message..." required></textarea>
                     </div>
+
                     <div class="form-group">
                         <button class="btn btn-primary btn-block" type="submit">Send Message</button>
                     </div>
+
+                    @if(session('success'))
+                        <p style="color: green;">{{ session('success') }}</p>
+                    @endif
                 </form>
             </div>
         </div>
