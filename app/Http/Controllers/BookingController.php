@@ -41,7 +41,7 @@ class BookingController extends Controller
 
         Booking::create($request->all());
 
-        return redirect()->back()->with('success', 'Flight booked successfully!');
+        return redirect()->route('flights')->with('success', 'Flight booked successfully!');
     }
 
     /**

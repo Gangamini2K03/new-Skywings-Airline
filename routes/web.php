@@ -1,73 +1,70 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\BillingController;
 
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\BillController;
 
+// If you actually use this middleware in settings.php, keep the import;
+// otherwise you can remove it.
+// use App\Http\Middleware\HandleAppearance;
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+/*Public pages (no login)*/
+Route::redirect('/map', '/contact')->name('map');
 
-Route::get('/about', function () {
-    return view('about');
-})->name('about');
+Route::view('/', 'home')->name('home');
+Route::view('/about', 'about')->name('about');
+Route::view('/contact', 'contact')->name('contact');      // Map is embedded in this view
+Route::view('/services', 'services')->name('services');
 
-Route::get('/admin', function () {
-    return view('admin');
-})->name('admin');
+/*Customer pages (login required)*/
+Route::middleware('auth')->group(function () {
+    // Make sure these view names match your Blade filenames exactly
+    Route::view('/flights', 'flights')->name('flights');   // resources/views/flights.blade.php
+    Route::view('/hotels',  'hotel')->name('hotels');      // resources/views/hotel.blade.php
+    Route::view('/seats',   'seat')->name('seats');        // resources/views/seat.blade.php
+    Route::view('/payment', 'payment')->name('payment');   // resources/views/payment.blade.php
 
-Route::get('/flights', function () {
-    return view('flight'); // ✅ This must match resources/views/flights.blade.php
-})->name('flights');
+    // Forms
+    Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
+    Route::post('/hotels',   [HotelController::class,   'store'])->name('hotels.store');
+    Route::post('/payment',  [PaymentController::class, 'store'])->name('payment.store');
 
-Route::get('/hotels', function () {
-    return view('hotel');
-})->name('hotels');
+    // Contact form submit
+    Route::post('/contact',  [ContactController::class, 'store'])->name('contact.store');
 
-Route::get('/seats', function () {
-    return view('seat');
-})->name('seats');
+    // Customer billing (ONE route only)
+    Route::get('/billing', [BillingController::class, 'index'])->name('billing.mine');
+    // If you prefer the alias:
+    // Route::get('/billing', [BillingController::class, 'myBilling'])->name('billing.mine');
+});
 
-Route::get('/payment', function () {
-    return view('payment');
-})->name('payment');
+/*Admin area (login + is_admin)*/
+Route::middleware(['auth', 'is_admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');
+        // Admin: users
+        Route::get('/users',     [AdminUserController::class, 'index'])->name('users');
+        Route::get('/users/{id}',[AdminUserController::class, 'show'])->name('users.show');
 
-Route::get('/map', function () {
-    return view('map');
-})->name('map');
+        // Admin: bills
+        Route::get('/bills', [BillController::class, 'index'])->name('bills');
 
-Route::get('/services', function () {
-    return view('services');
-})->name('services');
+        // Admin: hotels & contacts
+        Route::get('/hotels',   [HotelController::class, 'adminIndex'])->name('hotels');
+        Route::get('/contacts', [ContactController::class, 'index'])->name('contacts');
+    });
 
-Route::post('/hotels',[HotelController::class, 'store'])->name('hotels.store');
-
-Route::get('/admin/hotels', [HotelController::class, 'adminIndex'])->name('admin.hotels');
-
-Route::post('/payment', [PaymentController::class, 'store'])->name('payment.store');
-
-Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
-
-Route::get('/admin/contacts', [ContactController::class, 'index'])->name('admin.contacts');
-
-
-// OLD: You had a second form page here
-// Route::get('/book-flight', function () {
-//     return view('booking');
-// });
-
-// ✅ FIXED: Your main form is inside flights.blade.php
-// The POST route below is correct and saves data
-
-Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
-
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+/* Auth & Settings (keep once)*/
+require_once __DIR__.'/settings.php';
+require_once __DIR__.'/auth.php';

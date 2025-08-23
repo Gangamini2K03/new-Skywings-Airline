@@ -1,0 +1,1 @@
+<?php /**PATH C:\Users\user\Desktop\new_sky_wings_project\resources\views/partials/footer.blade.php ENDPATH**/ ?>

@@ -1,0 +1,26 @@
+@extends('layouts.app')
+@section('content')
+<div class="max-w-6xl mx-auto p-6">
+  <h1 class="text-2xl font-bold mb-4">All Users</h1>
+  <table class="w-full border-collapse">
+    <thead>
+      <tr>
+        <th class="border p-2 text-left">Name</th>
+        <th class="border p-2 text-left">Email</th>
+        <th class="border p-2 text-left">Admin?</th>
+        <th class="border p-2 text-left">Joined</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach($users as $u)
+      <tr>
+        <td class="border p-2">{{ $u->name }}</td>
+        <td class="border p-2">{{ $u->email }}</td>
+        <td class="border p-2">{{ $u->is_admin ? 'Yes' : 'No' }}</td>
+        <td class="border p-2">{{ $u->created_at->format('Y-m-d') }}</td>
+      </tr>
+      @endforeach
+    </tbody>
+  </table>
+</div>
+@endsection
